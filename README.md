@@ -1,16 +1,16 @@
-# EventCallStack-lib
+# eventHandler-lib
 
-This EventCallStack simulates EventHandlers similar to those of C#
+This eventHandler simulates EventHandlers similar to those of C#
 
 ## Example
 
 ```lua
 --- Require
----@class EventCallStack
-local EventCallStack = require("eventCallStack")
+---@class eventHandler
+local eventHandler = require("eventHandler")
 
 --- Init Event, do not forget that
-local testEvent = EventCallStack('Test')
+local testEvent = eventHandler('Test')
 
 --- Add as many callbacks for the Event as required
 local callbackObj = testEvent:AddCallback(function(parameter)

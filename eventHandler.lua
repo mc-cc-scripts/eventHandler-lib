@@ -8,7 +8,7 @@ local class = scm:load('ccClass')
 ---@field context any
 ---@field callbackID number
 
----@class EventCallStack
+---@class EventHandler
 ---@field name string
 ---@field callbackObjects CallbackObjects
 ---@field globalCallbackID number
@@ -23,8 +23,8 @@ end
 
 
 -- Main
----@class EventCallStack
-local EventCallStack = class(function(eventInstance, name)
+---@class EventHandler
+local EventHandler = class(function(eventInstance, name)
     eventInstance.name = name
     eventInstance.callbackObjects = {}
     eventInstance.globalCallbackID = 1
@@ -35,10 +35,10 @@ end)
 ---@param callback function
 ---@param context any | nil the context that will be provided when calling the Callback Functions (first Parameter)
 ---@return CallbackObjects
-function EventCallStack:AddCallback(callback, context)
+function EventHandler:AddCallback(callback, context)
     ---@class CallbackObjects
     local callbackObj = { ["callback"] = callback, ["context"] = context, ["callbackID"] = self.globalCallbackID }
-    checktypePositive(self == nil, 'self reference for the EventCallStack not provided on Invoke event')
+    checktypePositive(self == nil, 'self reference for the EventHandler not provided on Invoke event')
     checktypeNegative(type(callback) == "function", "the Callback is not a Function on Event: " .. self.name)
     if type(callback) == "function" then
         self.globalCallbackID = self.globalCallbackID + 1
@@ -50,8 +50,8 @@ end
 ---comment
 ---@param callbackObject CallbackObjects
 ---@return boolean success
-function EventCallStack:RemoveCallback(callbackObject)
-    checktypePositive(self == nil, 'self reference for the EventCallStack not provided on Invoke event')
+function EventHandler:RemoveCallback(callbackObject)
+    checktypePositive(self == nil, 'self reference for the EventHandler not provided on Invoke event')
     checktypeNegative(type(callbackObject) == "table" or type(callbackObject) == "number",
         "could not use type " .. type(callbackObject) .. " to delete any Callbacks")
     if type(callbackObject) == "table" then
@@ -70,8 +70,8 @@ end
 
 --- Calls all Functions within the Call-Que
 ---@param ... any any number of parameters for the function
-function EventCallStack:invoke(...)
-    checktypePositive(self == nil, 'self reference for the EventCallStack not provided on Invoke event')
+function EventHandler:invoke(...)
+    checktypePositive(self == nil, 'self reference for the EventHandler not provided on Invoke event')
     for _, callbackObject in pairs(self.callbackObjects) do
         if callbackObject.context then
             callbackObject.callback(callbackObject.context, ...)
@@ -81,4 +81,4 @@ function EventCallStack:invoke(...)
     end
 end
 
-return EventCallStack
+return EventHandler
